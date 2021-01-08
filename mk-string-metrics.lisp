@@ -45,9 +45,9 @@
 (defun hamming (x y)
   "Calculate Hamming distance between two given strings X and Y, they have
 to be of the same length."
-  (declare (type (simple-array character) x y)
+  (declare (type simple-string x y)
            (inline length)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (let ((result 0))
     (declare (type array-index result))
     (dotimes (i (length x) result)
@@ -58,9 +58,9 @@ to be of the same length."
 
 (defun levenshtein (x y)
   "Calculate Levenshtein distance between two given strings X and Y."
-  (declare (type (simple-array character) x y)
+  (declare (type simple-string x y)
            (inline length)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (let* ((x-len (length x))
          (y-len (length y))
          (v0 (make-array (1+ y-len) :element-type 'array-index))
@@ -86,9 +86,9 @@ to be of the same length."
 (defun damerau-levenshtein (x y)
   "Calculate Damerau-Levenshtein distance between two given strings X and
 Y."
-  (declare (type (simple-array character) x y)
+  (declare (type simple-string x y)
            (inline length)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (let* ((x-len (length x))
          (y-len (length y))
          (v0 (make-array (1+ y-len) :element-type 'array-index))
@@ -147,9 +147,9 @@ strings, while 1 means exact match."
 
 (defun string-to-set (str)
   "Convert string STR into a set. This function is supposed to be inlined."
-  (declare (type (simple-array character) str)
+  (declare (type simple-string str)
            (inline length)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (let ((result (make-hash-table)))
     (dotimes (i (length str))
       (let ((ch (char str i)))
@@ -163,7 +163,7 @@ strings, while 1 means exact match."
 supposed to be inlined."
   (let ((result 0))
     (declare (type array-index result)
-             (optimize (safety 0) (speed 3) (space 3)))
+             (optimize (speed 3) (space 3)))
     (maphash (lambda (key x-val)
                (declare (type array-index x-val))
                (let ((y-val (gethash key y)))
@@ -179,7 +179,7 @@ to be inlined."
   (let ((temp (make-hash-table))
         (result 0))
     (declare (type array-index result)
-             (optimize (safety 0) (speed 3) (space 3)))
+             (optimize (speed 3) (space 3)))
     (flet ((extract (h)
              (maphash (lambda (key val)
                         (declare (type array-index val))
@@ -203,9 +203,9 @@ to be inlined."
   "This function calculates overlap coefficient between two given strings X
 and Y. Returned value is in range from 0 (no similarity) to 1 (exact
 match)."
-  (declare (type (simple-array character) x y)
+  (declare (type simple-string x y)
            (inline length)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (/ (the array-index (intersection-length (string-to-set x)
                                            (string-to-set y)))
      (min (length x)
@@ -214,8 +214,8 @@ match)."
 (defun jaccard (x y)
   "Calculate Jaccard similarity coefficient for two strings X and
 Y. Returned value is in range from 0 (no similarity) to 1 (exact match)."
-  (declare (type (simple-array character) x y)
-           (optimize (safety 0) (speed 3) (space 3)))
+  (declare (type simple-string x y)
+           (optimize (speed 3) (space 3)))
   (let ((x (string-to-set x))
         (y (string-to-set y)))
     (if (and (zerop (hash-table-count x))
@@ -227,9 +227,9 @@ Y. Returned value is in range from 0 (no similarity) to 1 (exact match)."
 (defun fast-find (char str str-len &optional (start 0))
   "Check if CHAR is in STR. This function is supposed to be inlined."
   (declare (type character char)
-           (type (simple-array character) str)
+           (type simple-string str)
            (type array-index str-len start)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (do ((i start (1+ i)))
       ((>= i str-len))
     (declare (type array-index i))
@@ -239,9 +239,9 @@ Y. Returned value is in range from 0 (no similarity) to 1 (exact match)."
 (defun jaro (x y)
   "Calculate Jaro distance between two strings X and Y. Returned value is in
 range from 0 (no similarity) to 1 (exact match)."
-  (declare (type (simple-array character) x y)
+  (declare (type simple-string x y)
            (inline length)
-           (optimize (safety 0) (speed 1) (space 3)))
+           (optimize (speed 1) (space 3)))
   (let* ((x-len (length x))
          (y-len (length y))
          (d (if (and (>= x-len 2)
@@ -277,9 +277,9 @@ range from 0 (no similarity) to 1 (exact match)."
 
 (defun prefix-length (x y)
   "Calculate length of common prefix for strings X and Y."
-  (declare (type (simple-array character) x y)
+  (declare (type simple-string x y)
            (inline length)
-           (optimize (safety 0) (speed 3) (space 3)))
+           (optimize (speed 3) (space 3)))
   (let ((x-len (length x))
         (y-len (length y))
         (result 0))
